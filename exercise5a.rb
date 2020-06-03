@@ -3,7 +3,7 @@
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
-  puts "3. Save the list a file"
+  puts "3. Save the list to a file"
   puts "4. Load the list from a file"
   puts "9. Exit" # 9 because we'll be adding more items
 end
@@ -25,9 +25,11 @@ def process(selection)
     puts "Bye!"
     exit # this will cause the program to terminate
   when "3"
-    save_students
+    puts "Enter file name to save to"
+    save_students(STDIN.gets.chomp)
   when "4"
-    load_students
+    puts "Enter file name to load from"
+    load_students(STDIN.gets.chomp)
   else
     puts "I don't know what you meant, try again"
   end
@@ -74,28 +76,27 @@ def print_footer
   puts "Overall, we have #{@students.count} great students"
 end
 
-def save_students
-  puts "Enter file name"
+def save_students(filename)
+  # puts "Enter file name"
   # open the file for writing
-  file = File.open(STDIN.gets.chomp, "w")
+  file = File.open(filename, "w")
   # iterate over the array of students
   @students.each do |student|
     student_data = [student[:name], student[:cohort]]
     file.puts student_data.join(",")
   end
   file.close
-  puts "List saved"
+  puts "List saved to #{filename}"
 end
 
 def load_students(filename)
-  puts "Enter file name"
-  file = File.open(STDIN.gets.chomp, "r")
+  file = File.open(filename, "r")
   file.readlines.each do |line|
     name, cohort = line.chomp.split(',')
     add_hash_to_array(name, cohort)
   end
   file.close
-  puts "List loaded"
+  puts "List loaded from #{filename}"
 end
 
 def try_load_students
